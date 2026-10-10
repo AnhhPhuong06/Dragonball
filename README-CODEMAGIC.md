@@ -7,6 +7,8 @@ CocoaPods, certificate hay provisioning profile.
 ## Đưa cấu hình vào repo hiện có
 
 - Đặt `codemagic.yaml` ở **thư mục gốc của repo**.
+- Đặt `scripts/build-unsigned-ipa.sh` ở cùng đường dẫn trong repo;
+  GitHub Actions và Codemagic dùng chung script này.
 - Đặt `.gitattributes` và `.gitignore` cùng các file export iOS.
   Nếu ghép vào repo đã có các file này, thêm các quy tắc vào file hiện có.
 - Giữ đầy đủ `Classes`, `Data`, `Libraries`, `MainApp`, `Unity-iPhone`,

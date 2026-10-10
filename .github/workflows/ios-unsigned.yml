@@ -1,0 +1,54 @@
+name: Build unsigned iOS IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-unsigned-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build unsigned IPA
+    runs-on: macos-15
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      XCODE_PROJECT: Unity-iPhone.xcodeproj
+      XCODE_SCHEME: Unity-iPhone
+      XCODE_CONFIGURATION: Release
+    steps:
+      - name: Check out project and Git LFS libraries
+        uses: actions/checkout@v7
+        with:
+          lfs: true
+          persist-credentials: false
+
+      - name: Build unsigned IPA
+        run: bash scripts/build-unsigned-ipa.sh
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v7
+        with:
+          name: Dragonball-unsigned-ipa
+          path: build/ios-unsigned/*-unsigned.ipa
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
+      - name: Upload Xcode build log
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: xcodebuild-log
+          path: build/ios-unsigned/xcodebuild.log
+          if-no-files-found: ignore
+          retention-days: 14
