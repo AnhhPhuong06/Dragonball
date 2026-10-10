@@ -1,0 +1,11 @@
+# Xcode and Codemagic output
+/build/
+/DerivedData/
+*.ipa
+*.xcarchive
+*.dSYM/
+
+# Local Xcode settings
+xcuserdata/
+*.xcuserstate
+.DS_Store
